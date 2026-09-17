@@ -1,0 +1,396 @@
+﻿<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>PlayListSample - MainPage Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0f172a;
+      font-family: 'Assistant', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .phone-container {
+      width: 400px;
+      background: #ffffff;
+      border-radius: 44px;
+      border: 10px solid #1e293b;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5), 0 0 0 2px #334155;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 140px;
+      height: 24px;
+      background: #1e293b;
+      margin: 0 auto;
+      border-bottom-left-radius: 14px;
+      border-bottom-right-radius: 14px;
+      z-index: 100;
+    }
+
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 24px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .app-scroll-content {
+      padding: 16px 16px 30px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #f8fafc;
+    }
+
+    /* Block annotation wrapper */
+    .block-wrapper {
+      position: relative;
+      border-radius: 16px;
+      border: 2px dashed #94a3b8;
+      padding: 12px;
+      background: #ffffff;
+    }
+
+    .block-badge {
+      position: absolute;
+      top: -11px;
+      right: 14px;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 10px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* Hero */
+    .hero-banner {
+      background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+      color: white;
+      padding: 16px;
+      border-radius: 14px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+    .hero-banner h1 {
+      font-size: 19px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .hero-banner p {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    /* Block 1: Single-Item Viewer & Pagination */
+    .block-1 {
+      border-color: #3b82f6;
+    }
+    .block-1 .block-badge {
+      background: #3b82f6;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f1f5f9;
+      padding: 8px 10px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+
+    .btn-nav {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-nav.disabled {
+      background: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .pos-indicator {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .video-details-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      color: #334155;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    .detail-value {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .detail-value.link {
+      color: #1d4ed8;
+      font-family: monospace;
+      font-size: 11px;
+      direction: ltr;
+    }
+
+    .pill-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pill-watched {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .btn-toggle-watched {
+      background: #f8fafc;
+      color: #1e293b;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 8px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    /* Block 2: Add Video Form */
+    .block-2 {
+      border-color: #10b981;
+    }
+    .block-2 .block-badge {
+      background: #10b981;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .form-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .form-input {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 7px 10px;
+      font-size: 12.5px;
+      font-family: inherit;
+      color: #0f172a;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: #2563eb;
+      background: #ffffff;
+    }
+
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .btn-submit {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .btn-clear {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 8px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .status-alert {
+      text-align: center;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #4338ca;
+      margin-top: 6px;
+      min-height: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="phone-container" id="phone-frame">
+    <div class="phone-notch"></div>
+    <div class="status-bar">
+      <span>09:41</span>
+      <span>📶 🔋</span>
+    </div>
+
+    <div class="app-scroll-content">
+      
+      <!-- Hero Banner -->
+      <div class="hero-banner" id="hero-banner">
+        <h1>🎬 ניהול פלייליסט - חזרה על MVVM</h1>
+        <p>דפדוף, פקודות CanExecute וטופס הזנה Two-Way</p>
+      </div>
+
+      <!-- Block 1: Single-Item Viewer -->
+      <div class="block-wrapper block-1" id="block-1">
+        <div class="block-badge">בלוק 1: דפדוף בסרטונים (ITEM VIEWER)</div>
+        
+        <div class="card-title">
+          <span>📺 דפדוף בסרטונים (תצוגת פריט בודד)</span>
+        </div>
+
+        <!-- Navigation bar -->
+        <div class="nav-bar">
+          <button class="btn-nav">⬅ הקודם</button>
+          <span class="pos-indicator">סרטון 2 מתוך 4</span>
+          <button class="btn-nav">הבא ➡</button>
+        </div>
+
+        <!-- Video details -->
+        <div class="video-details-box">
+          <div class="detail-row">
+            <span class="detail-label">כותרת:</span>
+            <span class="detail-value">מבוא ל-Data Binding ב-MAUI</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">ערוץ:</span>
+            <span class="detail-value">DotNetIL</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">משך:</span>
+            <span class="detail-value">24 דק'</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">כתובת:</span>
+            <span class="detail-value link">youtu.be/sample-binding</span>
+          </div>
+          <div class="detail-row" style="margin-top: 4px;">
+            <span class="detail-label">סטטוס:</span>
+            <span class="pill-status pill-watched">נצפה ✓</span>
+          </div>
+
+          <button class="btn-toggle-watched">🔄 שנה סטטוס צפייה</button>
+        </div>
+      </div>
+
+      <!-- Block 2: Add Video Form -->
+      <div class="block-wrapper block-2" id="block-2">
+        <div class="block-badge">בלוק 2: טופס הזנה (TWO-WAY BINDING)</div>
+        
+        <div class="card-title">
+          <span>➕ הוספת סרטון חדש (טופס קלט)</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">כותרת הסרטון:</label>
+          <input type="text" class="form-input" value="פקודות ICommand ו-CanExecute">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">שם הערוץ:</label>
+          <input type="text" class="form-input" value="Microsoft Developers">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">משך בדקות:</label>
+          <input type="number" class="form-input" value="18">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">כתובת אינטרנט (URL):</label>
+          <input type="text" class="form-input" value="https://youtube.com/watch?v=demo2">
+        </div>
+
+        <div class="btn-grid">
+          <button class="btn-submit">💾 שמור סרטון</button>
+          <button class="btn-clear">🧹 נקה טופס</button>
+        </div>
+
+        <div class="status-alert">
+          הסרטון 'פקודות ICommand' נוסף בהצלחה לרשימה!
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

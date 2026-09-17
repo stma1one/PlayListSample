@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>מדריך מתודולוגיית פיתוח: מאיפה מתחילים ב-MVVM?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 16mm 20mm 16mm;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'Assistant', sans-serif;
+                font-size: 10pt;
+                color: #64748b;
+            }
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.6;
+            margin: 0;
+            padding: 24px;
+            font-size: 15px;
+        }
+        .header-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #4338ca 100%);
+            color: white;
+            padding: 32px 28px;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            box-shadow: 0 10px 25px -5px rgba(30, 27, 75, 0.25);
+        }
+        .header-card h1 {
+            margin: 0 0 8px 0;
+            font-size: 27px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .header-card .subtitle {
+            font-size: 17px;
+            color: #c7d2fe;
+            margin: 0 0 14px 0;
+            font-weight: 400;
+        }
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            color: #1e1b4b;
+            font-size: 20px;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 8px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h3 {
+            color: #312e81;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+        p { margin: 0 0 12px 0; }
+        ul, ol { margin: 0 0 16px 0; padding-right: 22px; }
+        li { margin-bottom: 6px; }
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0 24px 0;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid #e2e8f0;
+        }
+        .compare-table th {
+            background: #1e1b4b;
+            color: white;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 700;
+            text-align: right;
+        }
+        .compare-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        .compare-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+        .golden-path-container {
+            background: linear-gradient(to bottom, #f5f3ff, #ede9fe);
+            border: 2px solid #c4b5fd;
+            border-radius: 12px;
+            padding: 22px 24px;
+            margin: 24px 0;
+        }
+        .golden-path-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+            background: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .golden-path-step:last-child {
+            margin-bottom: 0;
+        }
+        .golden-num {
+            background: #4338ca;
+            color: white;
+            font-weight: 800;
+            font-size: 16px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .golden-content strong {
+            display: block;
+            color: #1e1b4b;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .callout {
+            border-right: 4px solid #4f46e5;
+            background: #eef2ff;
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 18px 0;
+        }
+        .callout.tip { border-right-color: #059669; background: #ecfdf5; }
+        .callout.warning { border-right-color: #d97706; background: #fffbeb; }
+        .callout strong { display: block; margin-bottom: 4px; color: #1e1b4b; }
+        pre {
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 14px 16px;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 12.5px;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 12px 0 18px 0;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+        }
+        code {
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 13px;
+            background: #f1f5f9;
+            color: #312e81;
+            padding: 2px 5px;
+            border-radius: 4px;
+            direction: ltr;
+            display: inline-block;
+        }
+        pre code { background: transparent; color: inherit; padding: 0; display: block; }
+        .c-keyword { color: #f472b6; font-weight: 600; }
+        .c-type { color: #38bdf8; }
+        .c-string { color: #34d399; }
+        .question-card {
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 12px 0;
+        }
+        .question-card strong { color: #6b21a8; }
+        @media print {
+            body { padding: 0; }
+            .header-card { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .golden-path-container { page-break-inside: avoid; box-shadow: none; }
+            pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-card">
+        <h1>מדריך מתודולוגיית פיתוח: מאיפה מתחילים ב-MVVM?</h1>
+        <div class="subtitle">View-First מול ViewModel-First ו"שביל הזהב" המומלץ לתלמידים ב-.NET MAUI</div>
+        <div class="meta-tags">
+            <span class="badge">תחום: מתודולוגיית הנדסת תוכנה</span>
+            <span class="badge">ארכיטקטורה: MVVM Best Practices</span>
+            <span class="badge">קהל יעד: מגמת הנדסת תוכנה / תיכון</span>
+            <span class="badge">חלק 2: מתודולוגיית עבודה</span>
+        </div>
+    </div>
+
+    <h2>🤔 1. הדילמה של המפתח המתחיל</h2>
+    <p>
+        נניח שיש לנו רעיון לאפליקציה (למשל, ניהול פלייליסט של סרטונים), וכבר הגדרנו את מודל הנתונים של הישות (<code>VideoItem</code>).
+        בדיוק בנקודה זו, כל תלמיד שואל את עצמו: <strong>מה הצעד הבא שלי בקוד?</strong>
+    </p>
+    <ul>
+        <li>האם לפתוח קודם כל את קובץ ה-XAML ולעצב את המסך (גישת <strong>View-First</strong>)?</li>
+        <li>או שמא לכתוב תחילה את מחלקת ה-ViewModel שמנהלת את הנתונים והפעולות (גישת <strong>ViewModel-First</strong>)?</li>
+    </ul>
+
+    <h2>⚖️ 2. ניתוח השוואתי: שתי הגישות</h2>
+
+    <table class="compare-table">
+        <thead>
+            <tr>
+                <th style="width: 25%;">הגישה</th>
+                <th style="width: 37%;">היתרונות</th>
+                <th style="width: 38%;">המלכודות לתלמיד</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>גישת View-First</strong><br><small>(עיצוב המסך תחילה ב-XAML)</small></td>
+                <td>
+                    • משוב ויזואלי מיידי – רואים את התוצאה הגרפית על המסך מיד.<br>
+                    • קל להגדיר מה צריך להיות במסך תוך כדי שרטוט פקדים.
+                </td>
+                <td>
+                    • <strong>הפיתוי לשבור MVVM:</strong> דאבל-קליק על כפתור מוביל לכתיבת אירועי <code>Button_Clicked</code> בקוד האחורי.<br>
+                    • <strong>Bindings "באוויר":</strong> כותבים <code>{Binding SaveCommand}</code> במסך לפני שהפקודה קיימת, ללא השלמה אוטומטית (IntelliSense), וקל מאוד לטעות באיות.
+                </td>
+            </tr>
+            <tr>
+                <td><strong>גישת ViewModel-First</strong><br><small>(הגדרת המצב והפקודות תחילה)</small></td>
+                <td>
+                    • <strong>בדיקתיות מלאה (Testability):</strong> הלוגיקה נבדקת ופועלת לפני שנוגעים ב-XAML.<br>
+                    • <strong>ה-XAML הופך להלבשה בלבד:</strong> כל ה-Bindings נשענים על מאפיינים קיימים ועובדים עם IntelliSense מלא ו-Compiled Bindings.
+                </td>
+                <td>
+                    • דורש יכולת הפשטה גבוהה – צריך לדמיין את התנהגות המסך מבלי לראות אותו עדיין בעיניים.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>🏆 3. "שביל הזהב" המומלץ לתלמידים: תהליך 4 השלבים</h2>
+    <p>
+        כדי ליהנות משני העולמות – גם בהירות ויזואלית וגם משמעת ארכיטקטונית נכונה – מומלץ לעבוד לפי "שביל הזהב":
+    </p>
+
+    <div class="golden-path-container">
+        <div class="golden-path-step">
+            <div class="golden-num">1</div>
+            <div class="golden-content">
+                <strong>שרטוט מהיר על דף נייר (Wireframe) ב-2 דקות</strong>
+                לפני שפותחים Visual Studio: לוקחים דף ומציירים מלבן של סמארטפון. מסמנים איפה יושב סרגל הדפדוף, איפה שדות הקלט ואיזה כפתורים קיימים. השרטוט מעניק מענה מיידי לשאלה: <em>מה המשתמש רואה ומה הוא עושה?</em>
+            </div>
+        </div>
+
+        <div class="golden-path-step">
+            <div class="golden-num">2</div>
+            <div class="golden-content">
+                <strong>הגדרת המודל והשירות (Model & Service)</strong>
+                יוצרים את מחלקת הנתונים (<code>VideoItem</code>) ואת ממשק השירות (<code>IVideoService</code>) עם מתודות <code>Task</code> א-סינכרוניות. כעת יש לנו מקור מידע אמין.
+            </div>
+        </div>
+
+        <div class="golden-path-step">
+            <div class="golden-num">3</div>
+            <div class="golden-content">
+                <strong>מימוש ה-ViewModel (תרגום השרטוט ל-State ו-Commands)</strong>
+                עוברים על השרטוט הידני שציירנו בשלב 1 וגוזרים מתוכו:
+                <br>• כל טקסט שמשתנה על המסך ➔ הופך ל-<code>Property</code> ב-ViewModel עם <code>OnPropertyChanged()</code>.
+                <br>• כל כפתור שהמשתמש יכול ללחוץ ➔ הופך ל-<code>Command</code> ב-ViewModel עם תנאי <code>CanExecute</code>.
+            </div>
+        </div>
+
+        <div class="golden-path-step">
+            <div class="golden-num">4</div>
+            <div class="golden-content">
+                <strong>הלבשת המסך ב-XAML (View & Bindings)</strong>
+                פותחים את קובץ ה-XAML, מניחים את הפקדים, ומבצעים <code>{Binding}</code> למאפיינים ולפקודות שכבר קיימים ונבדקו ב-ViewModel.
+            </div>
+        </div>
+    </div>
+
+    <h2>💡 4. דוגמה מוחשית מתוך הפרויקט: כפתור "נקה טופס"</h2>
+    <div class="callout tip">
+        <strong>ניתוח מקרה בוחן (Case Study):</strong>
+        נניח שבשרטוט המסך שלך מופיע כפתור <strong>"נקה טופס"</strong>.<br>
+        לפי <strong>"שביל הזהב"</strong>:
+        <ol style="margin-top: 8px;">
+            <li><strong>בשלב 3 (ב-ViewModel):</strong> נגדיר פקודת <code>ClearFormCommand</code>. נכתוב עבורה מתודה שמאפסת את המאפיינים:
+                <pre><code><span class="c-keyword">private void</span> ExecuteClearForm()
+{
+    InputTitle = <span class="c-string">""</span>;
+    InputChannelName = <span class="c-string">""</span>;
+    InputUrl = <span class="c-string">""</span>;
+    InputDurationText = <span class="c-string">""</span>;
+}</code></pre>
+            </li>
+            <li><strong>בשלב 4 (ב-XAML):</strong> נחבר את הכפתור ישירות:
+                <pre><code>&lt;<span class="c-keyword">Button</span> <span class="c-keyword">Text</span>=<span class="c-string">"נקה טופס"</span> <span class="c-keyword">Command</span>=<span class="c-string">"{Binding ClearFormCommand}"</span> /&gt;</code></pre>
+            </li>
+        </ol>
+        ה-Binding מתחבר מיד ללוגיקה שכבר עובדת ומגובה ב-IntelliSense מלא!
+    </div>
+
+    <h2>🧠 5. שאלות מחשבה ובדיקה עצמית לתלמיד</h2>
+
+    <div class="question-card">
+        <strong>שאלה 1: מניעת תקלות Binding</strong><br>
+        מדוע כתיבת ה-ViewModel לפני ה-XAML מונעת באגים של שגיאות כתיב (Typo) בשמות המאפיינים והפקודות?
+    </div>
+
+    <div class="question-card">
+        <strong>שאלה 2: כתיבת בדיקות יחידה (Unit Tests)</strong><br>
+        אם נרצה לבדוק שפקודת הדפדוף <code>NextCommand</code> ננעלת כאשר מגיעים לסרטון האחרון, האם אנחנו חייבים להפעיל את האפליקציה ולראות את המסך בעיניים? הסבר לפי עקרונות ה-ViewModel-First.
+    </div>
+
+    <div class="question-card">
+        <strong>שאלה 3: אתגר תכנוני</strong><br>
+        שרטט על דף מסך עם כפתור "שכפל סרטון". תאר אילו שינויים תבצע ב-ViewModel (אילו מאפיינים ופקודות תוסיף) לפני שתיגש לערוך את ה-XAML.
+    </div>
+
+</body>
+</html>

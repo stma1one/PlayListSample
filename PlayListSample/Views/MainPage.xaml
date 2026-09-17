@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="PlayListSample.Views.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PlayListSample.ViewModels"
+    Title="{Binding Title}"
+    x:DataType="vm:MainViewModel"
+    FlowDirection="RightToLeft">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="16">
+
+            <!--  כותרת ראשית ומחוון טעינה  -->
+            <Label
+                FontAttributes="Bold"
+                FontSize="22"
+                HorizontalOptions="Center"
+                Text="{Binding Title}" />
+
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsLoading}"
+                IsVisible="{Binding IsLoading}" />
+
+            <!--  כרטיסייה 1: דפדוף ותצוגת פריט בודד מתוך השירות הסטטי  -->
+            <Border Padding="14" StrokeShape="RoundRectangle 8">
+                <VerticalStackLayout Spacing="10">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="דפדוף בסרטונים (תצוגת פריט בודד)" />
+
+                    <!--  סרגל דפדוף  -->
+                    <Grid ColumnDefinitions="Auto, *, Auto">
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding PreviousCommand}"
+                            Text="⬅ הקודם" />
+
+                        <Label
+                            Grid.Column="1"
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"
+                            Text="{Binding CurrentPositionText}"
+                            VerticalOptions="Center" />
+
+                        <Button
+                            Grid.Column="2"
+                            Command="{Binding NextCommand}"
+                            Text="הבא ➡" />
+                    </Grid>
+
+                    <BoxView HeightRequest="1" Color="LightGray" />
+
+                    <!--  פרטי הפריט הנוכחי המוצג על המסך  -->
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="15"
+                        Text="{Binding CurrentVideo.Title, StringFormat='כותרת: {0}'}" />
+
+                    <Label Text="{Binding CurrentVideo.ChannelName, StringFormat='ערוץ: {0}'}" />
+
+                    <Label Text="{Binding CurrentVideo.FormattedDuration, StringFormat='משך: {0}'}" />
+
+                    <Label
+                        LineBreakMode="TailTruncation"
+                        Text="{Binding CurrentVideo.Url, StringFormat='כתובת אינטרנט: {0}'}"
+                        TextColor="DarkBlue" />
+
+                    <Label Text="{Binding CurrentVideo.WatchedStatusText, StringFormat='סטטוס: {0}'}" />
+
+                    <Button Command="{Binding ToggleWatchedCommand}" Text="שנה סטטוס צפייה" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!--  כרטיסייה 2: טופס הזנה של פריט בודד  -->
+            <Border Padding="14" StrokeShape="RoundRectangle 8">
+                <VerticalStackLayout Spacing="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="הוספת סרטון חדש (טופס קלט)" />
+
+                    <Label Text="כותרת הסרטון:" />
+                    <Entry Placeholder="הזן כותרת..." Text="{Binding InputTitle, Mode=TwoWay}" />
+
+                    <Label Text="שם הערוץ:" />
+                    <Entry Placeholder="הזן ערוץ..." Text="{Binding InputChannelName, Mode=TwoWay}" />
+
+                    <Label Text="משך בדקות:" />
+                    <Entry
+                        Keyboard="Numeric"
+                        Placeholder="למשל 15"
+                        Text="{Binding InputDurationText, Mode=TwoWay}" />
+
+                    <Label Text="כתובת אינטרנט (URL):" />
+                    <Entry Placeholder="https://..." Text="{Binding InputUrl, Mode=TwoWay}" />
+
+                    <Grid
+                        Margin="0,8,0,0"
+                        ColumnDefinitions="*, *"
+                        ColumnSpacing="10">
+                        <Button
+                            Grid.Column="0"
+                            Command="{Binding SaveCommand}"
+                            Text="שמור סרטון" />
+
+                        <Button
+                            Grid.Column="1"
+                            Command="{Binding ClearFormCommand}"
+                            Text="נקה טופס" />
+                    </Grid>
+
+                    <Label
+                        HorizontalOptions="Center"
+                        Text="{Binding StatusMessage}"
+                        TextColor="DarkSlateBlue" />
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

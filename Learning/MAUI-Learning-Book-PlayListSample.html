@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>ספר למידה: אפליקציית PlayListSample ב-.NET MAUI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 18mm 16mm 20mm 16mm;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'Assistant', sans-serif;
+                font-size: 10pt;
+                color: #64748b;
+            }
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Assistant', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: #ffffff;
+            color: #1e293b;
+            line-height: 1.6;
+            margin: 0;
+            padding: 24px;
+            font-size: 15px;
+        }
+        .header-card {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            color: white;
+            padding: 32px 28px;
+            border-radius: 14px;
+            margin-bottom: 28px;
+            box-shadow: 0 10px 25px -5px rgba(49, 46, 129, 0.2);
+        }
+        .header-card h1 {
+            margin: 0 0 8px 0;
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .header-card .subtitle {
+            font-size: 17px;
+            color: #c7d2fe;
+            margin: 0 0 14px 0;
+            font-weight: 400;
+        }
+        .meta-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+        .badge {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h2 {
+            color: #1e1b4b;
+            font-size: 20px;
+            border-bottom: 2px solid #e0e7ff;
+            padding-bottom: 8px;
+            margin-top: 32px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        h3 {
+            color: #312e81;
+            font-size: 16px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+        }
+        p { margin: 0 0 12px 0; }
+        ul, ol { margin: 0 0 16px 0; padding-right: 22px; }
+        li { margin-bottom: 6px; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 16px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .flow-diagram {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 12px 0;
+            direction: ltr;
+        }
+        .flow-node {
+            background: #ffffff;
+            border: 2px solid #4338ca;
+            color: #1e1b4b;
+            font-weight: 700;
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            font-size: 13px;
+        }
+        .flow-arrow {
+            color: #4338ca;
+            font-weight: 800;
+            font-size: 18px;
+        }
+        .callout {
+            border-right: 4px solid #4f46e5;
+            background: #eef2ff;
+            padding: 12px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+        }
+        .callout.tip { border-right-color: #059669; background: #ecfdf5; }
+        .callout.warning { border-right-color: #d97706; background: #fffbeb; }
+        .callout strong { display: block; margin-bottom: 4px; color: #1e1b4b; }
+        pre {
+            background: #0f172a;
+            color: #f1f5f9;
+            padding: 14px 16px;
+            border-radius: 8px;
+            direction: ltr;
+            text-align: left;
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 12.5px;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 12px 0 18px 0;
+            box-shadow: inset 0 2px 6px rgba(0,0,0,0.2);
+        }
+        code {
+            font-family: 'JetBrains Mono', Consolas, monospace;
+            font-size: 13px;
+            background: #f1f5f9;
+            color: #312e81;
+            padding: 2px 5px;
+            border-radius: 4px;
+            direction: ltr;
+            display: inline-block;
+        }
+        pre code { background: transparent; color: inherit; padding: 0; display: block; }
+        .c-keyword { color: #f472b6; font-weight: 600; }
+        .c-type { color: #38bdf8; }
+        .c-string { color: #34d399; }
+        .c-comment { color: #94a3b8; font-style: italic; }
+        .c-method { color: #fbbf24; }
+        .step-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin-bottom: 22px;
+            background: #ffffff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            page-break-inside: avoid;
+        }
+        .step-num {
+            display: inline-block;
+            background: #4338ca;
+            color: white;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 12px;
+            margin-left: 8px;
+        }
+        .question-card {
+            background: #faf5ff;
+            border: 1px solid #e9d5ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 10px 0;
+        }
+        .question-card strong { color: #6b21a8; }
+        @media print {
+            body { padding: 0; }
+            .header-card { box-shadow: none; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .step-card { page-break-inside: avoid; box-shadow: none; }
+            pre { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-card">
+        <h1>מדריך למידה ופיתוח: PlayListSample</h1>
+        <div class="subtitle">חזרה מעמיקה על MVVM, חיבור נתונים (Data Binding), פקודות ותשתית שירות מוק סטטי</div>
+        <div class="meta-tags">
+            <span class="badge">פלטפורמה: .NET 10 / .NET MAUI</span>
+            <span class="badge">ארכיטקטורה: MVVM נקי</span>
+            <span class="badge">יעד: מגמת הנדסת תוכנה / תיכון</span>
+            <span class="badge">חלק 1: בניית האפליקציה שלב אחר שלב</span>
+        </div>
+    </div>
+
+    <h2>🎯 1. המטרות הפדגוגיות של השלב</h2>
+    <p>
+        בשלב זה אנו מבצעים חזרה יסודית על ארכיטקטורת <strong>MVVM</strong> (Model-View-ViewModel).
+        כדי להתרכז בהבנה עמוקה של העקרונות ללא רעשי רקע, ניקינו את הפרויקט מכל מורכבות מיותרת:
+    </p>
+    <ul>
+        <li><strong>ללא Shell Navigation:</strong> חלון האפליקציה טוען ישירות את הדף <code>MainPage</code>.</li>
+        <li><strong>ללא DI Container (מכולת תלויות):</strong> החיבור בין הדף, ה-ViewModel וה-Service מתבצע ישירות ושקוף בקוד.</li>
+        <li><strong>ללא Styles ו-Themes מורכבים:</strong> ממשק XAML נקי וישיר שקל לקרוא ולתחזק.</li>
+        <li><strong>תצוגת פריט בודד ודפדוף:</strong> טרם הצגת רשימות ואוספים (<code>ObservableCollection</code>), אנו מתנסים בניהול פריט בודד על המסך עם כפתורי "הבא" ו"הקודם", מה שמכין את הקרקע לצורך המובהק באוספים בשלב הבא!</li>
+    </ul>
+
+    <div class="diagram-box">
+        <strong>תרשים זרימת הנתונים והאחריות (Data Flow)</strong>
+        <div class="flow-diagram">
+            <div class="flow-node">View<br><small>(MainPage.xaml)</small></div>
+            <div class="flow-arrow">⇄ Data Binding ⇄</div>
+            <div class="flow-node">ViewModel<br><small>(MainViewModel)</small></div>
+            <div class="flow-arrow">➔ IVideoService ➔</div>
+            <div class="flow-node">Service (Mock / DB)<br><small>(MockVideoService)</small></div>
+            <div class="flow-arrow">➔ POCO ➔</div>
+            <div class="flow-node">Model<br><small>(VideoItem)</small></div>
+        </div>
+        <small style="color: #64748b;">הפרדה מוחלטת: ה-View אינו יודע על ה-Service, וה-Service אינו מכיר את פקדי ה-UI.</small>
+    </div>
+
+    <h2>🛠️ 2. שלב אחר שלב: בניית האפליקציה מאפס</h2>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 1</span> הגדרת נקודת הכניסה לאפליקציה (ללא Shell)</h3>
+        <p>
+            במקום להשתמש במנגנון ה-Shell המורכב, נגדיר ב-<code>App.xaml.cs</code> טעינה ישירה של דף הבית:
+        </p>
+        <pre><code><span class="c-keyword">namespace</span> PlayListSample;
+
+<span class="c-keyword">public partial class</span> <span class="c-type">App</span> : <span class="c-type">Application</span>
+{
+    <span class="c-keyword">public</span> App()
+    {
+        InitializeComponent();
+    }
+
+    <span class="c-keyword">protected override</span> <span class="c-type">Window</span> CreateWindow(<span class="c-type">IActivationState</span>? activationState)
+    {
+        <span class="c-comment">// החלון מייצר ישירות את MainPage ללא Shell וללא ניתובים מיותרים</span>
+        <span class="c-keyword">return new</span> <span class="c-type">Window</span>(<span class="c-keyword">new</span> <span class="c-type">MainPage</span>());
+    }
+}</code></pre>
+        <div class="callout tip">
+            <strong>💡 דגש פדגוגי:</strong>
+            הסרת ה-Shell מאפשרת לתלמידים להתרכז בליבה של חיבור הנתונים (Data Binding) מבלי להתבלבל מניתובים (Routes), טאבים או Flyouts.
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 2</span> שכבת המודל (Model) - <code>Models/VideoItem.cs</code></h3>
+        <p>
+            המודל הוא מחלקת נתונים פשוטה (POCO). שימו לב שכללנו מזהה <code>Id</code> כדי להכין מראש את המודל למעבר עתידי ל-SQLite:
+        </p>
+        <pre><code><span class="c-keyword">namespace</span> PlayListSample.Models;
+
+<span class="c-keyword">public class</span> <span class="c-type">VideoItem</span>
+{
+    <span class="c-keyword">public int</span> Id { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; }
+    <span class="c-keyword">public string</span> Title { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; } = <span class="c-keyword">string</span>.Empty;
+    <span class="c-keyword">public string</span> Url { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; } = <span class="c-keyword">string</span>.Empty;
+    <span class="c-keyword">public string</span> ChannelName { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; } = <span class="c-keyword">string</span>.Empty;
+    <span class="c-keyword">public int</span> DurationMinutes { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; }
+    <span class="c-keyword">public bool</span> IsWatched { <span class="c-keyword">get</span>; <span class="c-keyword">set</span>; }
+
+    <span class="c-comment">// מאפייני עזר לקריאה בלבד עבור תצוגה נקייה ב-XAML</span>
+    <span class="c-keyword">public string</span> FormattedDuration => DurationMinutes > 0 ? $"<span class="c-string">{DurationMinutes} דק'</span>" : <span class="c-string">"לא צוין"</span>;
+    <span class="c-keyword">public string</span> WatchedStatusText => IsWatched ? <span class="c-string">"נצפה ✓"</span> : <span class="c-string">"טרם נצפה ⏳"</span>;
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 3</span> שכבת השירות: החוזה והמוק הסטטי</h3>
+        <p>
+            אנו מגדירים ממשק <code>IVideoService</code> שכל מתודותיו א-סינכרוניות ומחזירות <code>Task</code>:
+        </p>
+        <pre><code><span class="c-keyword">public interface</span> <span class="c-type">IVideoService</span>
+{
+    <span class="c-type">Task</span>&lt;<span class="c-type">IReadOnlyList</span>&lt;<span class="c-type">VideoItem</span>&gt;&gt; GetAllVideosAsync();
+    <span class="c-type">Task</span>&lt;<span class="c-type">VideoItem</span>?&gt; GetVideoByIdAsync(<span class="c-keyword">int</span> id);
+    <span class="c-type">Task</span>&lt;<span class="c-keyword">bool</span>&gt; AddVideoAsync(<span class="c-type">VideoItem</span> video);
+    <span class="c-type">Task</span>&lt;<span class="c-keyword">bool</span>&gt; UpdateVideoAsync(<span class="c-type">VideoItem</span> video);
+    <span class="c-type">Task</span>&lt;<span class="c-keyword">bool</span>&gt; DeleteVideoAsync(<span class="c-keyword">int</span> id);
+}</code></pre>
+        <p>
+            את הממשק אנו מממשים באמצעות <code>MockVideoService</code> עם רשימה סטטית פנימית ו-<code>await Task.Delay(100)</code> המדמה קריאה לרשת או לדיסק.
+        </p>
+        <div class="callout warning">
+            <strong>⚠️ עקרון אדריכלי מכריע:</strong>
+            מדוע להשתמש ב-<code>Task</code> גם כשמדובר ברשימה בזיכרון? מכיוון שבעתיד נחליף את המוק במסד נתונים של SQLite, וה-ViewModel לא יצטרך להשתנות כלל!
+        </div>
+    </div>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 4</span> מחלקת הבסיס ל-ViewModel: <code>BaseViewModel.cs</code></h3>
+        <p>
+            כל ViewModel יורש ממחלקה זו, המממשת את <code>INotifyPropertyChanged</code> ומאפשרת למסך לקבל עדכונים חיים על שינויי ערכים:
+        </p>
+        <pre><code><span class="c-keyword">public abstract class</span> <span class="c-type">BaseViewModel</span> : <span class="c-type">INotifyPropertyChanged</span>
+{
+    <span class="c-keyword">private bool</span> _isLoading;
+    <span class="c-keyword">public event</span> <span class="c-type">PropertyChangedEventHandler</span>? PropertyChanged;
+
+    <span class="c-keyword">public bool</span> IsLoading
+    {
+        <span class="c-keyword">get</span> => _isLoading;
+        <span class="c-keyword">set</span>
+        {
+            <span class="c-keyword">if</span> (_isLoading != value)
+            {
+                _isLoading = value;
+                OnPropertyChanged();
+                OnPropertyChanged(<span class="c-keyword">nameof</span>(IsNotLoading));
+            }
+        }
+    }
+
+    <span class="c-keyword">public bool</span> IsNotLoading => !IsLoading;
+
+    <span class="c-keyword">protected void</span> OnPropertyChanged([<span class="c-type">CallerMemberName</span>] <span class="c-keyword">string</span>? propertyName = <span class="c-keyword">null</span>)
+    {
+        PropertyChanged?.Invoke(<span class="c-keyword">this</span>, <span class="c-keyword">new</span> <span class="c-type">PropertyChangedEventArgs</span>(propertyName));
+    }
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 5</span> ה-ViewModel הראשי: <code>MainViewModel.cs</code></h3>
+        <p>
+            ה-ViewModel מנהל את כל המצב והפעולות במסך:
+        </p>
+        <ul>
+            <li><strong>אינדקס דפדוף (<code>_currentIndex</code>):</strong> מצביע על הסרטון הנוכחי ברשימה.</li>
+            <li><strong>פקודות עם CanExecute:</strong> <code>NextCommand</code> ו-<code>PreviousCommand</code> ננעלות אוטומטית כאשר מגיעים לקצה הרשימה בעזרת <code>ChangeCanExecute()</code>.</li>
+            <li><strong>טופס קלט (Two-Way Binding):</strong> שדות <code>InputTitle</code>, <code>InputUrl</code> וכו' להזנת סרטון חדש.</li>
+            <li><strong>פקודת שמירה (<code>SaveCommand</code>):</strong> מוסיפה את הסרטון ל-Service ומעבירה מיידית את הדפדוף לסרטון החדש.</li>
+        </ul>
+        <pre><code><span class="c-comment">// הגדרת הפקודות והתנאים שלהן בבנאי</span>
+NextCommand = <span class="c-keyword">new</span> <span class="c-type">Command</span>(ExecuteNext, CanExecuteNext);
+PreviousCommand = <span class="c-keyword">new</span> <span class="c-type">Command</span>(ExecutePrevious, CanExecutePrevious);
+
+<span class="c-keyword">private bool</span> CanExecuteNext()
+{
+    <span class="c-keyword">return</span> IsNotLoading && _videos.Count > 0 && _currentIndex < _videos.Count - 1;
+}
+
+<span class="c-keyword">private bool</span> CanExecutePrevious()
+{
+    <span class="c-keyword">return</span> IsNotLoading && _videos.Count > 0 && _currentIndex > 0;
+}</code></pre>
+    </div>
+
+    <div class="step-card">
+        <h3><span class="step-num">שלב 6</span> המסך (View): <code>MainPage.xaml</code> וחיבור ישיר</h3>
+        <p>
+            המסך מורכב משני מקטעים פשוטים בתוך <code>VerticalStackLayout</code>:
+        </p>
+        <ol>
+            <li><strong>מקטע דפדוף ותצוגת פריט יחיד:</strong> כפתורי הקודם/הבא, כותרת, ערוץ, משך, כתובת אינטרנט (URL), סטטוס צפייה וכפתור שינוי סטטוס.</li>
+            <li><strong>מקטע הוספת סרטון:</strong> שדות <code>Entry</code> עם Two-Way Binding וכפתור שמירה.</li>
+        </ol>
+        <pre><code><span class="c-comment">&lt;!-- פרטי הפריט הנוכחי כולל כתובת ה-URL --&gt;</span>
+&lt;<span class="c-keyword">Label</span> <span class="c-keyword">Text</span>=<span class="c-string">"{Binding CurrentVideo.Title, StringFormat='כותרת: {0}'}"</span> <span class="c-keyword">FontAttributes</span>=<span class="c-string">"Bold"</span> /&gt;
+&lt;<span class="c-keyword">Label</span> <span class="c-keyword">Text</span>=<span class="c-string">"{Binding CurrentVideo.ChannelName, StringFormat='ערוץ: {0}'}"</span> /&gt;
+&lt;<span class="c-keyword">Label</span> <span class="c-keyword">Text</span>=<span class="c-string">"{Binding CurrentVideo.FormattedDuration, StringFormat='משך: {0}'}"</span> /&gt;
+&lt;<span class="c-keyword">Label</span> <span class="c-keyword">Text</span>=<span class="c-string">"{Binding CurrentVideo.Url, StringFormat='כתובת אינטרנט: {0}'}"</span> <span class="c-keyword">TextColor</span>=<span class="c-string">"DarkBlue"</span> /&gt;
+&lt;<span class="c-keyword">Label</span> <span class="c-keyword">Text</span>=<span class="c-string">"{Binding CurrentVideo.WatchedStatusText, StringFormat='סטטוס: {0}'}"</span> /&gt;
+
+<span class="c-comment">&lt;!-- חיבור ישיר ושקוף בקוד האחורי (Code-Behind) ללא DI Container --&gt;</span>
+<span class="c-keyword">public partial class</span> <span class="c-type">MainPage</span> : <span class="c-type">ContentPage</span>
+{
+    <span class="c-keyword">public</span> MainPage()
+    {
+        InitializeComponent();
+        BindingContext = <span class="c-keyword">new</span> <span class="c-type">MainViewModel</span>(<span class="c-keyword">new</span> <span class="c-type">MockVideoService</span>());
+    }
+}</code></pre>
+    </div>
+
+    <h2>🧠 3. שאלות חשיבה ואתגרים לתלמיד</h2>
+
+    <div class="question-card">
+        <strong>שאלה 1: מנגנון CanExecute</strong><br>
+        מדוע השימוש ב-<code>Command</code> עם מתודת <code>CanExecute</code> עדיף בהרבה על בדיקה ידנית באירוע לחיצה (<code>Button_Clicked</code>)?
+    </div>
+
+    <div class="question-card">
+        <strong>שאלה 2: פריט בודד לעומת אוסף (לקראת השלב הבא)</strong><br>
+        האפליקציה הנוכחית מציגה סרטון אחד בכל רגע נתון. מה הקושי המרכזי בחוויית המשתמש באופן זה, ואיזה רכיב של MAUI יפתור זאת כאשר נעבור לעבודה עם אוספים?
+    </div>
+
+    <div class="question-card">
+        <strong>שאלה 3: הרחבת הפונקציונליות (משימת אתגר אישית)</strong><br>
+        הוסיפו כפתור "מחק סרטון" (<code>DeleteCommand</code>) אשר ימחק את הסרטון הנוכחי מהשירות, יעדכן את הרשימה ויעביר את התצוגה לסרטון שלפניו. אילו בדיקות תצטרכו להגדיר ב-<code>CanExecute</code> של פקודה זו?
+    </div>
+
+</body>
+</html>
