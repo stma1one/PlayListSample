@@ -43,7 +43,7 @@
 
                             <Label Text="{Binding WatchedStatusText, StringFormat='סטטוס: {0}'}" />
 
-                            <Button CommandParameter="{Binding .}" Command="{Binding x:DataType='vm:MainViewModel',Source={RelativeSource Mode=FindAncestorBindingContext,AncestorType={x:Type vm:MainViewModel}}, Path=ToggleWatchedCommand}" Text="שנה סטטוס צפייה" />
+                            <Button  Command="{Binding x:DataType='vm:MainViewModel',Source={RelativeSource Mode=FindAncestorBindingContext,AncestorType={x:Type vm:MainViewModel}}, Path=ToggleWatchedCommand}" Text="שנה סטטוס צפייה" />
                         </VerticalStackLayout>
                         
                     </DataTemplate>

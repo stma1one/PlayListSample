@@ -51,7 +51,7 @@ public class MainViewModel : BaseViewModel
         NextCommand = new Command(ExecuteNext, CanExecuteNext);
         PreviousCommand = new Command(ExecutePrevious, CanExecutePrevious);
         SaveCommand = new Command(async () => await ExecuteSaveAsync(), () => IsNotLoading);
-        ToggleWatchedCommand = new Command<VideoItem>(async (v) => await ExecuteToggleWatchedAsync(v), (v) => v != null && IsNotLoading);
+        ToggleWatchedCommand = new Command(async () => await ExecuteToggleWatchedAsync(), () => CurrentVideo != null && IsNotLoading);
         ClearFormCommand = new Command(ExecuteClearForm, () => IsNotLoading);
 
         load = LoadVideosAsync();
@@ -193,19 +193,19 @@ public class MainViewModel : BaseViewModel
         return IsNotLoading && _videos.Count > 0 && _currentIndex > 0;
     }
 
-    private async Task ExecuteToggleWatchedAsync(VideoItem v)
+    private async Task ExecuteToggleWatchedAsync()
     {
-        if (v == null) return;
+        if (CurrentVideo == null) return;
 
         IsLoading = true;
         RefreshCommands();
 
-        v.IsWatched = !v.IsWatched;
-        await _videoService.UpdateVideoAsync(v);
+        CurrentVideo.IsWatched = !CurrentVideo.IsWatched;
+      
 
         // רענון התצוגה של הפריט הנוכחי
         await LoadVideosAsync();
-        StatusMessage = v.IsWatched ? "הסרטון סומן כנצפה!" : "הסרטון סומן כלא נצפה.";
+        StatusMessage = CurrentVideo.IsWatched ? "הסרטון סומן כנצפה!" : "הסרטון סומן כלא נצפה.";
 
         IsLoading = false;
         RefreshCommands();
